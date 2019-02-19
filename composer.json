@@ -1,0 +1,17 @@
+{
+  "name": "jonathanjfshaw/phpunitbehat",
+  "type": "library",
+  "description": "Use Behat from within PhpUnit.",
+  "keywords": ["phpunit", "behat", "testing"],
+  "license": "MIT",
+  "require": {
+      "php": ">=7.0.0",
+      "behat/behat": "^3.0",
+      "phpunit/phpunit": "^6.0"
+  },
+  "autoload": {
+      "psr-4": {
+          "JonathanJFShaw\\PhpUnitBehat\\": "src"
+      }
+  }
+}
