@@ -12,6 +12,8 @@ use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Suite\GenericSuite;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use PhpUnitBehat\Behat\Testwork\Environment\PhpUnitEnvironment;
+use PhpUnitBehat\PhpUnit\Framework\Constraint\HasScenarioPassedConstraint;
 
 // @todo stack exits on first call to class, should be last call to class
 // @todo Is phpUnitCallHandler really necessary? what's with the output buffering? Can we flush it?
@@ -23,16 +25,15 @@ use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 // @todo comment all the things
 // @todo coding standards
 
-trait BehatTestTrait  {
+trait BehatHelpersTrait  {
 
   use BehatContainerTrait;
-  use BehatHelpersTrait;
 
   protected $behatEnvironment;
 
-  protected $stepResults;
+  public $stepResults;
 
-  protected function getFeatureDefaultKeywordsEn() {
+  public function getFeatureDefaultKeywordsEn() {
 
     return new ArrayKeywords([
         'en' => [
@@ -54,7 +55,7 @@ trait BehatTestTrait  {
 
   public static function assertScenarioPassed($scenarioResults, $scenario = NULL, $stepResults = [], $message = '')
   {
-      $constraint = new \Drupal\Tests\ahs_miscellaneous\Unit\HasScenarioPassedConstraint($scenario, $stepResults, get_called_class());
+      $constraint = new HasScenarioPassedConstraint($scenario, $stepResults, get_called_class());
       self::assertThat($scenarioResults, $constraint, $message);
   }
 
@@ -68,24 +69,24 @@ trait BehatTestTrait  {
       $this->stepResults[] = [$event->getTestResult(), $event->getStep()];
     }
 
-    protected function getBehatDefinitionFinder() {
+    public function getBehatDefinitionFinder() {
       return $this->getBehatContainer()->get('definition.finder');
     }
     
-    protected function getBehatScenarioTester() {
+    public function getBehatScenarioTester() {
       return $this->getBehatContainer()->get('tester.scenario');
     }
     
-    protected function getBehatOutlineTester() {
+    public function getBehatOutlineTester() {
       return $this->getBehatContainer()->get('tester.outline');
     }
     
-    protected function getBehatEventDispatcher() {
+    public function getBehatEventDispatcher() {
       return $this->getBehatContainer()->get(EventDispatcherExtension::DISPATCHER_ID);
     }
     
     
-      protected function getBehatEnvironment() {
+      public function getBehatEnvironment() {
         if (is_null($this->behatEnvironment)) {
             $environment = new PhpUnitEnvironment(new GenericSuite('test',[]));
             $environment->registerContextClass(get_class($this));

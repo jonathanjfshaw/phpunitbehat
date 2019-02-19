@@ -48,14 +48,14 @@ class HasScenarioPassedConstraint extends Constraint
     protected function additionalFailureDescription($scenarioResults): string
     {
       $converter = new ResultToStringConverter();
-      $stepsMessage = [];
+      $steps = [];
       $exceptionString = '';
       foreach ($this->stepResults as $stepResult) {
           $result = $stepResult[0];
           $step = $stepResult[1];
           $resultString = ucfirst($converter->convertResultToString($result));
           $stepString = $step->getKeyword() . ' ' . $step->getText();
-          $stepsMessage[] = $resultString . ': ' . $stepString;
+          $steps[] = $resultString . ': ' . $stepString;
           if ($result instanceof ExceptionResult && $exception = $result->getException()) {
             if (!$exception instanceof ExpectationFailedException) {
               // @todo assterioninvalidargsexception
@@ -63,7 +63,8 @@ class HasScenarioPassedConstraint extends Constraint
             }
           }
       }
-      $desc =  "Steps:\n" . implode("\n", $stepsMessage) . "\n" . $exceptionString . "\n";
+      $intro = !is_null($this->scenario) ? "Scenario '" . $this->scenario->getTitle() . "':": '"Steps:"';
+      $desc =  ".\n" . $intro . "\n" . implode("\n", $steps) . "\n" . $exceptionString . "\n";
       return $desc;
     }
 

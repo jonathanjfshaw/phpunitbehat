@@ -16,16 +16,13 @@ use Behat\Gherkin\Node\OutlineNode;
 // @todo Is phpUnitCallHandler really necessary? what's with the output buffering? Can we flush it?
 // @todo does the environment really need to implement contextenvironment
 // @todo handle assertioninvalidargsexception in constraint
+// @todo proper aPI for getting stepResults
 // @todo comment all the things
 // @todo coding standards
 
 trait BehatTestTrait  {
 
-  use BehatContainerTrait;
-
-  protected $behatEnvironment;
-
-  protected $stepResults;
+  use BehatHelpersTrait;
 
   protected function getFeatureDefaultKeywordsEn() {
 
@@ -72,51 +69,5 @@ trait BehatTestTrait  {
     $scenarioResults = $tester->test($this->getBehatEnvironment(), $feature, $scenario, false);
     $this->assertScenarioPassed($scenarioResults, $scenario, $this->stepResults);
   }
-
-
-  public static function assertScenarioPassed($scenarioResults, $scenario = NULL, $stepResults = [], $message = '')
-  {
-      $constraint = new \Drupal\Tests\ahs_miscellaneous\Unit\HasScenarioPassedConstraint($scenario, $stepResults, get_called_class());
-      self::assertThat($scenarioResults, $constraint, $message);
-  }
-
-    /**
-     * Store the last step.
-     *
-     * @param AfterStepTested $event
-     */
-    public function storeLastStep(AfterStepTested $event)
-    {
-      $this->stepResults[] = [$event->getTestResult(), $event->getStep()];
-    }
-
-    protected function getBehatDefinitionFinder() {
-      return $this->getBehatContainer()->get('definition.finder');
-    }
-    
-    protected function getBehatScenarioTester() {
-      return $this->getBehatContainer()->get('tester.scenario');
-    }
-    
-    protected function getBehatOutlineTester() {
-      return $this->getBehatContainer()->get('tester.outline');
-    }
-    
-    protected function getBehatEventDispatcher() {
-      return $this->getBehatContainer()->get(\Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension::DISPATCHER_ID);
-    }
-    
-    
-      protected function getBehatEnvironment() {
-        if (is_null($this->behatEnvironment)) {
-            $environment = new PhpUnitEnvironment(new \Behat\Testwork\Suite\GenericSuite('test',[]));
-            $environment->registerContextClass(get_class($this));
-            $environment = $environment;
-            $environment->setTestCase($this);
-            $this->behatEnvironment = $environment;
-        }
-        return $this->behatEnvironment;
-      }
-    
 
 }

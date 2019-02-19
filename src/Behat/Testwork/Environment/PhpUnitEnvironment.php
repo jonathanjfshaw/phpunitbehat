@@ -1,11 +1,12 @@
 <?php
 
-namespace Behat\Behat\Context\Environment\ContextEnvironment;
+namespace PhpUnitBehat\Behat\Testwork\Environment;
 
 use Behat\Testwork\Suite\Suite;
 use PHPUnit_Framework_TestCase;
 use Behat\Testwork\Call\Callee;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
+use Behat\Behat\Context\Environment\ContextEnvironment;
 
 class PhpUnitEnvironment implements ContextEnvironment
 {
