@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpUnitBehat\Behat\Testwork\Environment\Handler;
+namespace PHPUnitBehat\Behat\Testwork\Environment\Handler;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
-use PhpUnitBehat\Behat\Testwork\Environment\PhpUnitEnvironment;
+use PHPUnitBehat\Behat\Testwork\Environment\PHPUnitEnvironment;
 
 /**
  * Represents environment handler for a PhpUnitEnvironment.
  * 
- * Based on \Behat\Testwork\Environment\Handler\StaticEnvironmentHandler
+ * Based on \Behat\Testwork\Environment\Handler\StaticEnvironmentHandler.
  */
-class PhpUnitEnvironmentHandler implements EnvironmentHandler
+class PHPUnitEnvironmentHandler implements EnvironmentHandler
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class PhpUnitEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        return new PhpUnitEnvironment($suite);
+        return new PHPUnitEnvironment($suite);
     }
 
     /**
@@ -35,7 +35,7 @@ class PhpUnitEnvironmentHandler implements EnvironmentHandler
      */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
-        return $environment instanceof PhpUnitEnvironment;
+        return $environment instanceof PHPUnitEnvironment;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpUnitBehat\PhpUnit\Framework;
+namespace PHPUnitBehat\TestTraits;
 
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
@@ -44,6 +44,9 @@ trait BehatContainerTrait  {
     protected static $behatContainer;
 
     // see https://dzone.com/articles/practical-php-testing/practical-php-testing-patterns-23
+    // If this trait is used in a base test class that many test classes extend, then
+    // the container will only be built once during a phpUnit execution, not once
+    // per test class, because ::behatContainer is a static property.   
     protected function getBehatContainer() {
       if (self::$behatContainer === null) {
         $this->setBehatContainer();
@@ -53,18 +56,17 @@ trait BehatContainerTrait  {
 
   protected function setBehatContainer() {
     // Create the container.
-    $extensionManager = new ExtensionManager($this->getDefaultExtensions());
+    $extensionManager = new ExtensionManager($this->getBehatExtensions());
     $containerLoader = new ContainerLoader($extensionManager);
     $containerBuilder = new ContainerBuilder;
 
     // Provide basic parameters required by Behat, even though they make no sense in PhpUnit.
     $containerBuilder->setParameter('paths.base', '');
-    $containerBuilder->setParameter('cli.command.name', $this->getName());
     $containerBuilder->set('cli.input', new ArrayInput([]));
     $containerBuilder->set('cli.output', new NullOutput());
 
     // Add the PhpUnit behat environment handler.
-    $definition = new Definition('PhpUnitBehat\Behat\Testwork\Environment\Handler\PhpUnitEnvironmentHandler');
+    $definition = new Definition('PHPUnitBehat\Behat\Testwork\Environment\Handler\PhpUnitEnvironmentHandler');
     $definition->addTag('environment.handler', array('priority' => 0));
     $containerBuilder->setDefinition('environment.handler.phpunit', $definition);
 
@@ -75,31 +77,44 @@ trait BehatContainerTrait  {
     self::$behatContainer = $containerBuilder;
   }
 
-  protected function getDefaultExtensions()
+
+  /**
+   * Get an array of Behat extensions.
+   * 
+   * These have all been verified as needed for our purposes, except
+   * GherkinTranslationExtension, HookExtension and TransformationExtension 
+   * which simply look like they might be useful.
+   * 
+   * They are all heavily interdependent.
+   *
+   * @return array
+   */
+  protected function getBehatExtensions()
   {
+      // The commented out lines are Behat default extensions which we don't need.
       $processor = new \Behat\Testwork\ServiceContainer\ServiceProcessor();
       return array(
         new ArgumentExtension(),
         new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
         new SuiteExtension($processor),
-        new ExceptionExtension($processor),
+//        new ExceptionExtension($processor),
         new GherkinExtension($processor),
         new CallExtension($processor),
         new TranslatorExtension(),
         new GherkinTranslationsExtension(),
         new TesterExtension($processor),
-        new CliExtension($processor),
+//        new CliExtension($processor),
         new EnvironmentExtension($processor),
         new SpecificationExtension($processor),
         new FilesystemExtension(),
         new ContextExtension($processor),
-        new SnippetExtension($processor),
+//        new SnippetExtension($processor),
         new DefinitionExtension($processor),
         new EventDispatcherExtension($processor),
         new HookExtension(),
         new TransformationExtension($processor),
-        new OrderingExtension($processor),
-        new HelperContainerExtension($processor)
+ //       new OrderingExtension($processor),
+//        new HelperContainerExtension($processor)
     );
   }
 

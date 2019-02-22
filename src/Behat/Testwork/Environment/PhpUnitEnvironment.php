@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpUnitBehat\Behat\Testwork\Environment;
+namespace PHPUnitBehat\Behat\Testwork\Environment;
 
 use Behat\Testwork\Suite\Suite;
 use PHPUnit_Framework_TestCase;
@@ -8,15 +8,51 @@ use Behat\Testwork\Call\Callee;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 
-class PhpUnitEnvironment implements ContextEnvironment
+/**
+ * A Behat environment representing a PHPUnit testcase.
+ * 
+ * This implements ContextEnvironment so as to avoid the need for a new
+ * EnvironmentReader class as well; this is somewhat hackish as this interface 
+ * requires more methods than we strictly need for the phpunit use case.
+ * 
+ * Much of the code is borrowed from 
+ * Behat\Behat\Context\Environment\UnitializedContextEnvironment and
+ * Behat\Testwork\Environment\StaticEnvironment.
+ * 
+ * When used with a PHPUnit testcase, the testcase class name is supplied using 
+ * ::registerContextClass(), and this will be used by Behat to parse the testcase 
+ * using reflection to find methods with Behat annotations matching step definitions.
+ * The instantiated testclass is supplied with ::setTestCase() and this is used in
+ * ::bindCallee to execute the found step method on the instantiated testcase object.
+ * 
+ */
+class PHPUnitEnvironment implements ContextEnvironment
 {
-    // \Behat\Behat\Context\Environment\UninitializedContextEnvironment
-    // implements \Behat\Behat\Context\Environment\UninitializedContextEnvironment
-    //extends \Behat\Testwork\Environment\StaticEnvironment
+
     /**
      * @var array[]
      */
     private $contextClasses = array();
+
+    /**
+     * Specifies the current PhpUnit test case.
+     *
+     * @param PHPUnit_Framework_TestCase $testCase
+     */
+    public function setTestCase(PHPUnit_Framework_TestCase $testCase)
+    {
+        $this->testCase = $testCase;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bindCallee(Callee $callee)
+    {
+        // Execute the method against the instantiated testcase.
+        $method = $callee->getCallable()[1];
+        return [$this->testCase, $method];
+    }
 
     /**
      * Registers context class.
@@ -28,6 +64,9 @@ class PhpUnitEnvironment implements ContextEnvironment
      */
     public function registerContextClass($contextClass, array $arguments = null)
     {
+        // Unlike the method in 
+        // Behat\Behat\Context\Environment\UnitializedContextEnvironment
+        // we don't require that the context implements ContextInterface.
         if (!class_exists($contextClass)) {
             throw new ContextNotFoundException(sprintf(
                 '`%s` context class not found and can not be used.',
@@ -82,30 +121,11 @@ class PhpUnitEnvironment implements ContextEnvironment
     }
 
     /**
-     * Specifies the current PhpUnit test case.
-     *
-     * @param PHPUnit_Framework_TestCase $testCase
-     */
-    public function setTestCase(PHPUnit_Framework_TestCase $testCase)
-    {
-        $this->testCase = $testCase;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getSuite()
+    final public function getSuite()
     {
         return $this->suite;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function bindCallee(Callee $callee)
-    {
-        $method = $callee->getCallable()[1];
-        return [$this->testCase, $method];
     }
 
 }
