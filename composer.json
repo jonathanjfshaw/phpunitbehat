@@ -4,14 +4,26 @@
   "description": "Use Behat from within PHPUnit.",
   "keywords": ["phpunit", "behat", "testing"],
   "license": "MIT",
+  "authors": [
+    {
+        "name": "Jonathan Shaw",
+        "email": "jonathanjfshaw@gmail.com"
+    }
+  ],  
   "require": {
       "php": ">=7.0.0",
       "behat/behat": "^3.0",
-      "phpunit/phpunit": "^6.0"
+      "phpunit/phpunit": "^6.0",
+      "symfony/dependency-injection": "^3.0"
   },
   "autoload": {
       "psr-4": {
           "PHPUnitBehat\\": "src"
       }
+  },
+  "autoload-dev": {
+    "psr-4": {
+        "PHPUnitBehat\\Tests\\": "tests"
+    }
   }
 }

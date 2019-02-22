@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpUnitBehat\PhpUnit\Framework\Constraint;
+namespace PHPUnitBehat\PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;

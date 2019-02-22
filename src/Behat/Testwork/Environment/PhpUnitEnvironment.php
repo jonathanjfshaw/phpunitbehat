@@ -3,7 +3,7 @@
 namespace PHPUnitBehat\Behat\Testwork\Environment;
 
 use Behat\Testwork\Suite\Suite;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Behat\Testwork\Call\Callee;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Environment\ContextEnvironment;
@@ -32,14 +32,14 @@ class PHPUnitEnvironment implements ContextEnvironment
     /**
      * @var array[]
      */
-    private $contextClasses = array();
+    protected $contextClasses = array();
 
     /**
      * Specifies the current PhpUnit test case.
      *
-     * @param PHPUnit_Framework_TestCase $testCase
+     * @param \PHPUnit\Framework\TestCase $testCase
      */
-    public function setTestCase(PHPUnit_Framework_TestCase $testCase)
+    public function setTestCase(TestCase $testCase)
     {
         $this->testCase = $testCase;
     }
