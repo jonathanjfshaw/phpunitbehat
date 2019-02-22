@@ -1,0 +1,4 @@
+name: phpunitbehat
+recipe: lamp
+config:
+  webroot: .
