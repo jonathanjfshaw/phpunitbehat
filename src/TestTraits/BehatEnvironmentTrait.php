@@ -8,7 +8,7 @@ use PHPUnitBehat\Behat\Testwork\Environment\PHPUnitEnvironment;
 trait BehatEnvironmentTrait  {
 
   /**
-   * @var \PhpUnitBehat\Behat\Testwork\Environment\PhpUnitEnvironment $behatEnvironment
+   * @var \PHPUnitBehat\Behat\Testwork\Environment\PHPUnitEnvironment $behatEnvironment
    *   A Behat environment that works with phpunit.
    */
   protected $behatEnvironment;
@@ -16,7 +16,7 @@ trait BehatEnvironmentTrait  {
   /**
    * Get a Behat environment suitable for PHP unit.
    *
-   * @return \PhpUnitBehat\Behat\Testwork\Environment\PhpUnitEnvironment
+   * @return \PHPUnitBehat\Behat\Testwork\Environment\PHPUnitEnvironment
    *   A Behat environment that works with phpunit.
    */
   public function getBehatEnvironment() {
