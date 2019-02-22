@@ -66,7 +66,7 @@ trait BehatContainerTrait  {
     $containerBuilder->set('cli.output', new NullOutput());
 
     // Add the PhpUnit behat environment handler.
-    $definition = new Definition('PHPUnitBehat\Behat\Testwork\Environment\Handler\PhpUnitEnvironmentHandler');
+    $definition = new Definition('PHPUnitBehat\Behat\Testwork\Environment\Handler\PHPUnitEnvironmentHandler');
     $definition->addTag('environment.handler', array('priority' => 0));
     $containerBuilder->setDefinition('environment.handler.phpunit', $definition);
 
