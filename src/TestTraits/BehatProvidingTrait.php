@@ -48,11 +48,11 @@ trait BehatProvidingTrait  {
     foreach ($feature->getScenarios() as $scenario) {
         if ($scenario instanceof OutlineNode)  {
           foreach ($outline->getExamples() as $example) {
-            $scenarios[] = [$example->getTitle(), $example, $feature];
+            $scenarios[$example->getTitle()] = [$example, $feature];
           }
         }
         else {
-          $scenarios[] = [$scenario->getTitle(), $scenario, $feature];
+          $scenarios[$scenario->getTitle()] = [$scenario, $feature];
         }
     }
     return $scenarios;

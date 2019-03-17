@@ -124,6 +124,12 @@ You can define these undefined steps in your PHPUnit test class like this:
 
 ```
 
+You can specify individual scenarios to run because the scenario title is given as the data provider name. For example to test a scenario with title `Undefined`:
+```
+phpunit --filter '@Undefined'
+```
+More complex possibilities exist; see https://phpunit.de/manual/6.5/en/textui.html#textui.examples.filter-patterns.
+
 ## Notes
 The code has not been tested with Behat's 'Outline' scenarios, but it should work.
 
