@@ -7,6 +7,7 @@ use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Parser;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\OutlineNode;
 
 trait BehatProvidingTrait  {
 
@@ -47,8 +48,8 @@ trait BehatProvidingTrait  {
     $scenarios = [];
     foreach ($feature->getScenarios() as $scenario) {
         if ($scenario instanceof OutlineNode)  {
-          foreach ($outline->getExamples() as $example) {
-            $scenarios[$example->getTitle()] = [$example, $feature];
+          foreach ($scenario->getExamples() as $index => $example) {
+            $scenarios[$scenario->getTitle() . ' #' . $index] = [$example, $feature];
           }
         }
         else {
