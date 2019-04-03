@@ -2,14 +2,6 @@
 
 namespace PHPUnitBehat\TestTraits;
 
-// proof read
-// @todo coding standards
-// github real
-// packagist
-// require in project
-// merge branch
-// refactor hasscenariopassedconstraint for reuse
-
 trait BehatTestTrait  {
 
   use BehatScenarioTestingTrait;
@@ -31,7 +23,7 @@ trait BehatTestTrait  {
    * 
    * @dataProvider providerTestBehatScenario
    */
-  public function testBehatScenario($scenarioTitle, $scenario, $feature) {
+  public function testBehatScenario($scenario, $feature) {
     $this->assertBehatScenario($scenario, $feature);
   }
 
