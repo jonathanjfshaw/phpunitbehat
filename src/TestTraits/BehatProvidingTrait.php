@@ -8,6 +8,8 @@ use Behat\Gherkin\Parser;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\KeywordNodeInterface;
+use Behat\Gherkin\Node\ScenarioInterface;
 
 trait BehatProvidingTrait  {
 
@@ -95,5 +97,44 @@ trait BehatProvidingTrait  {
         ],
       ]);
     }
+
+  /**
+   * Get the current feature.
+   *
+   * This is intended to be called from within a test method or test setUp
+   * method, where it is sometimes useful to have access to the feature for
+   * prettier troubleshooting output.
+   *
+   * @return \Behat\Gherkin\Node\KeywordNodeInterface
+   */
+  protected function getProvidedFeature() {
+    $data = $this->getProvidedData();
+    if (is_array($data) && $feature = $data[1]) {
+      if ($feature instanceof KeywordNodeInterface) {
+        return $feature;
+      }
+    }
+    throw new \Exception("Feature not found in provided data.");
+  }
+
+  /**
+   * Get the current scenario or example.
+   *
+   * This is intended to be called from within a test method or test setUp
+   * method, where it is sometimes useful to have access to the scenario for
+   * prettier troubleshooting output.
+   *
+   * @return \Behat\Gherkin\Node\ScenarioInterface
+   *   The current scenario or example.
+   */
+  protected function getProvidedScenario() {
+    $data = $this->getProvidedData();
+    if (is_array($data) && $scenario = $data[0]) {
+      if ($scenario instanceof ScenarioInterface) {
+        return $scenario;
+      }
+    }
+    throw new \Exception("Scenario not found in provided data.");
+  }
 
 }
