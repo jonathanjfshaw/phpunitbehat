@@ -12,11 +12,6 @@ trait BehatScenarioTestingTrait  {
   use BehatContainerTrait;
   use BehatEnvironmentTrait;
 
-  // Make the scenario and feature available to test methods, 
-  // this can be useful for debugging output.
-  protected $behatFeature;
-  protected $behatScenario;
-
   public static function assertBehatScenarioPassed($scenarioResults, $scenario = NULL, $stepResults = [], $snippetGenerator = NULL, $environment = NULL, $message = '', $callHandler = '')
   {
     $constraint = new HasScenarioPassedConstraint($scenario, $stepResults, $callHandler, $snippetGenerator, $environment);
@@ -25,8 +20,6 @@ trait BehatScenarioTestingTrait  {
 
   public function executeBehatScenario($scenario, $feature) {
     $tester = $this->getBehatContainer()->get(TesterExtension::SCENARIO_TESTER_ID);
-    $this->behatFeature = $feature;
-    $this->behatScenario = $scenario;
     $scenarioResults = $tester->test($this->getBehatEnvironment(), $feature, $scenario, false);
     return $scenarioResults;
   }
