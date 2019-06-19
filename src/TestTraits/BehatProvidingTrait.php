@@ -7,8 +7,8 @@ use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Parser;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\FeatureInterface;
 use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\KeywordNodeInterface;
 use Behat\Gherkin\Node\ScenarioInterface;
 
 trait BehatProvidingTrait  {
@@ -105,12 +105,12 @@ trait BehatProvidingTrait  {
    * method, where it is sometimes useful to have access to the feature for
    * prettier troubleshooting output.
    *
-   * @return \Behat\Gherkin\Node\FeatureInterface
+   * @return \Behat\Gherkin\Node\KeywordNodeInterface
    */
   protected function getProvidedFeature() {
     $data = $this->getProvidedData();
     if (is_array($data) && $feature = $data[1]) {
-      if ($feature instanceof FeatureInterface) {
+      if ($feature instanceof KeywordNodeInterface) {
         return $feature;
       }
     }
