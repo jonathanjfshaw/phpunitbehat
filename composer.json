@@ -13,7 +13,7 @@
   "require": {
       "php": ">=7.0.0",
       "behat/behat": "^3.0",
-      "phpunit/phpunit": "^7.0",
+      "phpunit/phpunit": ">=6.0 <8.0",
       "symfony/dependency-injection": "^3.0"
   },
   "autoload": {
