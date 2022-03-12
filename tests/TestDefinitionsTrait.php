@@ -36,14 +36,6 @@ trait TestDefinitionsTrait {
     $this->assertTrue(false);
   }
 
-  /**
-   * @Given a Mink expectation exception
-   */
-  public function aMinkExpectationExceptionStep() {
-    $driver = $this->getMockBuilder('Behat\Mink\Driver\DriverInterface')->getMock();
-    throw new ExpectationException("A mink expectation was not met", $driver);
-  }  
-
   protected function anError() {
     throw new TestException("A test error message");
   }
