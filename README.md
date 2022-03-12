@@ -124,15 +124,40 @@ You can define these undefined steps in your PHPUnit test class like this:
 
 ```
 
+
+## Running tests
+
 You can specify individual scenarios to run because the scenario title is given as the data provider name. For example to test a scenario with title `Undefined`:
 ```
 phpunit --filter '@Undefined'
 ```
 More complex possibilities exist; see https://phpunit.de/manual/6.5/en/textui.html#textui.examples.filter-patterns.
 
+## Failures and errors
+
+Phpunit will report any instance of ExpectationFailedException as a failure and other exceptions as errors. In some circumstances you may wish to display certain exceptions as errors. For example, if you're using Mink for web assertions, you may want to report Mink's ExpectationExpection (which is thrown when web content does not match an expectation) as a failure not an error.
+
+To achieve this, in your test's base class you can catch these errors when scenario results are examined:
+
+```
+  use BehatTestTrait {
+    assertBehatScenarioPassed as assertBehatScenarioPassedTrait;
+  }
+
+  public static function assertBehatScenarioPassed($scenarioResults, $scenario = NULL, $stepResults = [], $snippetGenerator = NULL, $environment = NULL, $message = '', $callHandler = '')
+  {
+    try {
+      self::assertBehatScenarioPassedTrait($scenarioResults, $scenario, $stepResults, $snippetGenerator, $environment, $message, $callHandler);
+    }
+    catch (\Behat\Mink\Exception\ExpectationException $e) {
+      throw new ExpectationFailedWrappedException($e);
+    }
+  }
+}
+```
+
 ## Notes
 The code has not been tested with Behat's 'Outline' scenarios, but it should work.
-
 
 ## License
 
