@@ -2,6 +2,8 @@
 
 namespace PHPUnitBehat\Tests;
 
+use Behat\Mink\Exception\ExpectationException;
+
 /**
  * 
  */
@@ -33,6 +35,13 @@ trait TestDefinitionsTrait {
   public function aFailStep() {
     $this->assertTrue(false);
   }
+
+  /**
+   * @Given a Mink expectation exception
+   */
+  public function aMinkExpectationExceptionStep() {
+    throw new ExpectationException("A mink expectation was not met");
+  }  
 
   protected function anError() {
     throw new TestException("A test error message");

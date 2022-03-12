@@ -2,12 +2,13 @@
 
 namespace PHPUnitBehat\Tests;
 
+use Behat\Mink\Exception\ExpectationException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\ExpectationFailedException;
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 
 /**
- * 
+ *
  */
 class BehatScenarioTestingTraitTest extends TestCase {
 
@@ -17,23 +18,23 @@ class BehatScenarioTestingTraitTest extends TestCase {
   protected $testBehatFeature = <<<'FEATURE'
 Feature: BehatScenarioTestingTrait
     In order to test a feature
-    We need to able to test scenarios 
+    We need to able to test scenarios
 
     Scenario: #0 Success
-        Given a success    
+        Given a success
 
     Scenario: #1 Failure
         Given a failure
-    
+
     Scenario: #2 Error
         Given an error
 
     Scenario: #3 Undefined
-        Given a step that has no matches          
+        Given a step that has no matches
 
     Scenario: #4 Undefined after failure
         Given a failure
-        And a step that has no matches     
+        And a step that has no matches
 
     Scenario: #5 Bad construction
         Given a badly constructed step
@@ -44,7 +45,10 @@ Feature: BehatScenarioTestingTrait
 
     Scenario: #7 Error after success
         Given a success
-        And an error      
+        And an error
+
+    Scenario: #8 Mink expectation exception
+        Given a Mink expectation exception
 FEATURE;
 
 
@@ -71,7 +75,7 @@ FEATURE;
       "Failed asserting that false is true.",
     ];
     $this->assertBehatScenarioAssertion($scenario, ExpectationFailedException::class, $exceptionMessages);
-  }  
+  }
 
   /**
    * Test scenario "#2 Error"
@@ -86,7 +90,7 @@ FEATURE;
       "A test error message",
     ];
     $this->assertBehatScenarioAssertion($scenario, TestException::class, $exceptionMessages);
-  }  
+  }
 
   /**
    * Test scenario "#3 Undefined"
@@ -102,7 +106,7 @@ FEATURE;
       "public function aStepThatHasNoMatches()",
     ];
     $this->assertBehatScenarioAssertion($scenario, ExpectationFailedException::class, $exceptionMessages);
-  }    
+  }
 
   /**
    * Test scenario "#4 Undefined after fail"
@@ -119,7 +123,7 @@ FEATURE;
 //      "public function aStepThatHasNoMatches()",
     ];
     $this->assertBehatScenarioAssertion($scenario, ExpectationFailedException::class, $exceptionMessages);
-  }  
+  }
 
   /**
    * Test scenario "#5 Bad construction"
@@ -134,7 +138,7 @@ FEATURE;
     ];
     $this->assertBehatScenarioAssertion($scenario, UnknownParameterValueException::class, $exceptionMessages);
   }
-  
+
   /**
    * Test scenario "#6 Failure after success"
    */
@@ -167,5 +171,20 @@ FEATURE;
     $this->assertBehatScenarioAssertion($scenario, TestException::class, $exceptionMessages);
   }
 
-}
+  /**
+   * Test scenario "#8 Mink expectation exception"
+   */
+  public function testMinkExpectationException() {
+    // Mink ExpectationException are treated as failures not errors.
+    $scenario = $this->getTestBehatScenario(8);
+    $result = $this->executeTestBehatScenario($scenario);
+    $this->assertTestFailed($result);
+    $exceptionMessages = [
+      "Scenario '#8 Mink expectation exception' had steps:",
+      "Failed: Given a Mink expectation exception",
+      "A mink expectation was not met",
+    ];
+    $this->assertBehatScenarioAssertion($scenario, ExpectationException::class, $exceptionMessages);
+  }
 
+}
