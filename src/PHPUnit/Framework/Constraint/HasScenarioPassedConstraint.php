@@ -2,6 +2,8 @@
 
 namespace PHPUnitBehat\PHPUnit\Framework\Constraint;
 
+use Behat\Mink\Exception\ExpectationException;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Constraint\Constraint;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Testwork\Tester\Result\ExceptionResult;
@@ -11,6 +13,7 @@ use \Exception;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
+use PHPUnit\Util\Filter;
 
 
 class HasScenarioPassedConstraint extends Constraint
@@ -59,12 +62,19 @@ class HasScenarioPassedConstraint extends Constraint
 TPL;
 
   /**
+   * An exception that indicates a failure not an error.
+   *
+   * @var \Behat\Mink\Exception\ExpectationException
+   */
+  protected $failureException;
+
+  /**
    * Construct a new constraint.
    *
    * @param \Behat\Gherkin\Node\ScenarioNode|NULL $scenario
    *   A Behat scenario.
    * @param array $stepResults
-   *   An array of Behat step results, with keys 'step' and 'testResult'. 
+   *   An array of Behat step results, with keys 'step' and 'testResult'.
    * @param string $scenarioCallHandler
    *   The name of the class the executed the scenario step calls.
    */
@@ -90,19 +100,21 @@ TPL;
      */
     protected function failureDescription($other): string
     {
-        // Because we throw exceptions in ::bubbleStepResults(),
-        // this is only used for undefined steps, not failing steps.       
-        return ' ' . $this->toString();
+        return $this->toString();
     }
 
     /**
      * {@inheritdoc}
      */
     protected function additionalFailureDescription($other): string
-    {   
-        // Because we throw exceptions in ::bubbleStepResults(),
-        // we expect to only use this for undefined steps, not failing steps.
+    {
         $stepsMessage = $this->stepResultsMessage($this->stepResults);
+        if (isset($this->failureException)) {
+          $message = $this->failureException->getMessage();
+          $trace = Filter::getFilteredStacktrace($this->failureException);
+          return "$message\n\n$trace";;
+        }
+        // The failure must be because of undefined steps.
         $snippetsMessage = $this->snippetsMessage();
         return "$stepsMessage\n\n$snippetsMessage";
     }
@@ -112,14 +124,20 @@ TPL;
      */
     protected function matches($scenarioResults): bool
     {
-        $this->bubbleStepResults();
+        try {
+          $this->bubbleStepResults();
+        }
+        // Treat ExpectationException as failure not error.
+        catch (ExpectationException $e) {
+          $this->failureException = $e;
+        }
         return $scenarioResults->isPassed();
     }
-  
+
     /**
      * Force exceptions and stdout from steps to bubble up into phpunit.
-     * 
-     * Behat's RuntimeCallHandler catches these during step execution 
+     *
+     * Behat's RuntimeCallHandler catches these during step execution
      * and stores them on the call result.
      */
     protected function bubbleStepResults() {
@@ -148,12 +166,12 @@ TPL;
      *   An array of steps executed up to this point in this scenario.
      */
     protected function modifyExceptionMessage(Exception &$exception, array $stepsSoFar) {
-      $traceReflector = new \ReflectionProperty('Exception', 'message');
-      $traceReflector->setAccessible(true);
-      $originalMessage = $traceReflector->getValue($exception);
+      $messageReflector = new \ReflectionProperty('Exception', 'message');
+      $messageReflector->setAccessible(true);
+      $originalMessage = $messageReflector->getValue($exception);
       $stepResultsMessage = $this->stepResultsMessage($stepsSoFar);
-      $modifiedMessage = "\n$stepResultsMessage\n\n$originalMessage";
-      $traceReflector->setValue($exception, $modifiedMessage);
+      $modifiedMessage = "$stepResultsMessage\n\n$originalMessage";
+      $messageReflector->setValue($exception, $modifiedMessage);
     }
 
     /**
@@ -175,7 +193,7 @@ TPL;
           $stepString = $step->getKeyword() . ' ' . $step->getText();
           $steps[] = $resultString . ': ' . $stepString;
       }
-      $message =  "$intro\n" . implode("\n", $steps);
+      $message =  "\n$intro\n" . implode("\n", $steps);
       return $message;
     }
 
@@ -190,7 +208,7 @@ TPL;
     protected function truncateExceptionTrace(Exception &$exception, $ceiling) {
       if ($exception instanceof PHPUnitException) {
         // PhpUnit's trace is copied to a serializableTrace property
-        // when the exception s created and this is used when rendering to string. 
+        // when the exception s created and this is used when rendering to string.
         $reflectionClassName = 'PHPUnit\FrameworkException\Exception';
         $traceReflector = new \ReflectionProperty('PHPUnit\Framework\Exception', 'serializableTrace');
         $fullTrace = $exception->getSerializableTrace();
@@ -262,6 +280,6 @@ TPL;
         return $this->snippetGenerator->generateSnippet($this->environment, $step)->getSnippet();
       }
     }
-    
+
 
 }
