@@ -47,8 +47,6 @@ Feature: BehatScenarioTestingTrait
         Given a success
         And an error
 
-    Scenario: #8 Mink expectation exception
-        Given a Mink expectation exception
 FEATURE;
 
 
@@ -169,22 +167,6 @@ FEATURE;
       "A test error message",
     ];
     $this->assertBehatScenarioAssertion($scenario, TestException::class, $exceptionMessages);
-  }
-
-  /**
-   * Test scenario "#8 Mink expectation exception"
-   */
-  public function testMinkExpectationException() {
-    // Mink ExpectationException are treated as failures not errors.
-    $scenario = $this->getTestBehatScenario(8);
-    $result = $this->executeTestBehatScenario($scenario);
-    $this->assertTestFailed($result);
-    $exceptionMessages = [
-      "Scenario '#8 Mink expectation exception' had steps:",
-      "Failed: Given a Mink expectation exception",
-      "A mink expectation was not met",
-    ];
-    $this->assertBehatScenarioAssertion($scenario, ExpectationException::class, $exceptionMessages);
   }
 
 }
