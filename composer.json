@@ -11,10 +11,10 @@
     }
   ],  
   "require": {
-      "php": ">=7.0.0",
-      "behat/behat": "^3.0",
-      "phpunit/phpunit": ">=6.0 <8.0",
-      "symfony/dependency-injection": "^3.0"
+      "php": ">=7.4.0",
+      "phpunit/phpunit": "^9.5.0",
+      "behat/behat": "^3.12.0",
+      "symfony/dependency-injection": "^4.4"
   },
   "autoload": {
       "psr-4": {
