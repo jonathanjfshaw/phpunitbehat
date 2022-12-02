@@ -4,6 +4,8 @@ namespace PHPUnitBehat\TestTraits;
 
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
+use PHPUnitBehat\Compiler\PhpUnitBehatPublicContainerDefinitionCompiler;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -63,6 +65,9 @@ trait BehatContainerTrait  {
     // Provide basic parameters required by Behat, even though they make no sense in PhpUnit.
     $containerBuilder->setParameter('paths.base', '');
     $containerBuilder->set('cli.input', new ArrayInput([]));
+    // Set default command`s name that require Behat.
+    // The command`s name can`t be empty.
+    $containerBuilder->setParameter('cli.command.name', 'PHPUnitBehat');
     $containerBuilder->set('cli.output', new NullOutput());
 
     // Add the PhpUnit behat environment handler.
@@ -73,6 +78,8 @@ trait BehatContainerTrait  {
     // Finalise the container.
     $containerLoader->load($containerBuilder, []);
     $containerBuilder->addObjectResource($containerLoader);
+    // Added compiler pass in order to process service`s definitions.
+    $containerBuilder->addCompilerPass(new PhpUnitBehatPublicContainerDefinitionCompiler(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
     $containerBuilder->compile();
     self::$behatContainer = $containerBuilder;
   }
