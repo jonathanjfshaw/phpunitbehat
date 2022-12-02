@@ -9,8 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Compiles the services` definitions in the  container in order
  * to mark them as public that allows to get them form the container directly.
  */
-class PhpUnitBehatPublicContainerDefinitionCompiler implements CompilerPassInterface
-{
+class PhpUnitBehatPublicContainerDefinitionCompiler implements CompilerPassInterface {
 
     /**
      * Process service`s definitions.
@@ -20,7 +19,8 @@ class PhpUnitBehatPublicContainerDefinitionCompiler implements CompilerPassInter
      *
      * @return void
      */
-    public function process(ContainerBuilder $container) {
+    public function process(ContainerBuilder $container)
+    {
         foreach ($container->getDefinitions() as $definition) {
             // Mark all services` definitions as public in order to
             // have possibility get them directly from the container.
