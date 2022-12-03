@@ -17,10 +17,6 @@ By including these traits in your PHPUnit test classes you can:
 * Behat 3
 * PHPUnit 6+
 
-This project currently pins symfony/dependency-injection at ^3.0 because the way we are 
-accessing the Behat container is not currently compatible with Symfony 4. 
-PRs to fix this are very welcome ...
-
 ## Installation
 
 `composer require jonathanjfshaw/phpunitbehat`
