@@ -9,6 +9,11 @@ jobs:
       matrix:
         php: [7.3, 7.4, 8.0]
         phpunit: [6.5.13, 7.5.18, 8.5.31, 9.5.26]
+        exclude:
+          - phpunit: 6.5.13
+            php: 8.0
+          - phpunit: 7.5.18
+            php: 8.0
 
     steps:
       - uses: actions/checkout@v3
