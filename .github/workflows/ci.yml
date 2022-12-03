@@ -1,24 +1,31 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        phpunit: [6.5.13, 7.5.18, 8.5.31, 9.5.26]
         php: [7.3, 7.4]
-        phpunit: [6.5.13, 7.5.18]
+        include:
+          - phpunit: 8.5.31
+            php: 8.0
+          - phpunit: 9.5.26
+            php: 8.0
+          - phpunit: 9.5.26
+            php: 8.1
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: php-actions/composer@v6.0.0
+      - uses: php-actions/composer@v6.1.1
         with:
           php_version: ${{ matrix.php }}
 
       - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3.0.0
+        uses: php-actions/phpunit@v3.0.2
         with:
           php_version: ${{ matrix.php }}
           version: ${{ matrix.phpunit }}
