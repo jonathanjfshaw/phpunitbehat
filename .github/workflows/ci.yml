@@ -1,14 +1,14 @@
 name: CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.3, 7.4, 8.0]
-        phpunit: [6.5.13, 7.5.18, 8.5.31, 9.5.26]
+        php: [7.3, 7.4]
+        phpunit: [6.5.13, 7.5.18]
 
     steps:
       - uses: actions/checkout@v2
