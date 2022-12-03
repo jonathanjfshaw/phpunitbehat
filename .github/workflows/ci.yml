@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.3, 7.4]
         phpunit: [6.5.13, 7.5.18, 8.5.31, 9.5.26]
+        php: [7.3, 7.4]
         include:
           - phpunit: 8.5.31
             php: 8.0
