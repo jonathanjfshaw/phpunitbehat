@@ -2,17 +2,22 @@
 
 namespace PHPUnitBehat\PHPUnit\Framework;
 
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\Filter;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnitBehat\TestTraits\BehatExpectationFailedExceptionTrait;
 
 /**
  * Allows wrapping an exception as an expectation failure.
  *
  * @see \PHPUnit\Framework\ExceptionWrapper and \PHPUnit\Framework\Exception
  */
-class ExpectationFailedWrappedException extends ExpectationFailedException
+class ExpectationFailedWrappedException extends AssertionFailedError
 {
+    use BehatExpectationFailedExceptionTrait {
+      __construct as constructTrait;
+    }
 
     /**
      * The wrapped exception.
@@ -24,7 +29,7 @@ class ExpectationFailedWrappedException extends ExpectationFailedException
      */
     public function __construct(\Throwable $wrapped)
     {
-        parent::__construct($wrapped->getMessage(), NULL, $wrapped->getPrevious());
+        static::constructTrait($wrapped->getMessage(), NULL, $wrapped->getPrevious());
         $this->wrapped = $wrapped;
     }
 
