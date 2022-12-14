@@ -44,7 +44,7 @@ class ExpectationFailedWrappedException extends AssertionFailedError
   /**
    * @return string
    */
-  public function __toString()
+  public function __toString(): string
   {
     $string = TestFailure::exceptionToString($this->wrapped);
 
