@@ -35,7 +35,7 @@ trait BehatExpectationFailedExceptionTrait  {
   /**
    * @return string
    */
-  public function __toString()
+  public function __toString(): string
   {
     $string = TestFailure::exceptionToString($this);
 
