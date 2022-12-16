@@ -2,16 +2,16 @@
 
 namespace PHPUnitBehat\PHPUnit\Framework;
 
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\Filter;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Allows wrapping an exception as an expectation failure.
  *
- * @see \PHPUnit\Framework\ExceptionWrapper and \PHPUnit\Framework\Exception
+ * @see \PHPUnit\Framework\ExceptionWrapper and \PHPUnit\Framework\AssertionFailedError
  */
-class ExpectationFailedWrappedException extends ExpectationFailedException
+class ExpectationFailedWrappedError extends AssertionFailedError
 {
 
     /**
@@ -26,14 +26,6 @@ class ExpectationFailedWrappedException extends ExpectationFailedException
     {
         parent::__construct($wrapped->getMessage(), NULL, $wrapped->getPrevious());
         $this->wrapped = $wrapped;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getComparisonFailure()
-    {
-        return NULL;
     }
 
   /**
