@@ -133,7 +133,7 @@ More complex possibilities exist; see https://phpunit.de/manual/6.5/en/textui.ht
 
 Phpunit will report any instance of ExpectationFailedException as a failure and other exceptions as errors. In some circumstances you may wish to display certain exceptions as errors. For example, if you're using Mink for web assertions, you may want to report Mink's ExpectationExpection (which is thrown when web content does not match an expectation) as a failure not an error.
 
-To achieve this, in your test's base class you can catch these errors when scenario results are examined, and rethrow them using the provided ExpectationFailedWrappedException:
+To achieve this, in your test's base class you can catch these errors when scenario results are examined, and rethrow them using the provided ExpectationFailedWrappedError:
 
 ```
   use BehatTestTrait {
@@ -146,14 +146,11 @@ To achieve this, in your test's base class you can catch these errors when scena
       self::assertBehatScenarioPassedTrait($scenarioResults, $scenario, $stepResults, $snippetGenerator, $environment, $message, $callHandler);
     }
     catch (\Behat\Mink\Exception\ExpectationException $e) {
-      throw new \PHPUnitBehat\PHPUnit\Framework\ExpectationFailedWrappedException($e);
+      throw new \PHPUnitBehat\PHPUnit\Framework\ExpectationFailedWrappedError($e);
     }
   }
 }
 ```
-
-## Notes
-The code has not been tested with Behat's 'Outline' scenarios, but it should work.
 
 ## License
 
