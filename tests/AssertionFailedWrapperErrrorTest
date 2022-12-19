@@ -10,7 +10,7 @@ use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 /**
  *
  */
-class BehatScenarioTestingTraitTest extends TestCase {
+class AssertionFailedWrappedErrorTest extends TestCase {
 
   use TestDefinitionsTrait;
 
