@@ -2,10 +2,7 @@
 
 namespace PHPUnitBehat\Tests;
 
-use Behat\Mink\Exception\ExpectationException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\ExpectationFailedException;
-use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 
 /**
  *
