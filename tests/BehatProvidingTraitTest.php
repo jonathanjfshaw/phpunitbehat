@@ -3,8 +3,6 @@
 namespace PHPUnitBehat\Tests;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\ExpectationFailedException;
-use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use PHPUnitBehat\TestTraits\BehatTestTrait;
 use Behat\Gherkin\Node\KeywordNodeInterface;
 use Behat\Gherkin\Node\ScenarioInterface;
