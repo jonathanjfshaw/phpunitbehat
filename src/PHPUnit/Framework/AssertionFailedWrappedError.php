@@ -24,7 +24,7 @@ class AssertionFailedWrappedError extends AssertionFailedError
      */
     public function __construct(\Throwable $wrapped)
     {
-        parent::__construct($wrapped->getMessage(), NULL, $wrapped->getPrevious());
+        parent::__construct($wrapped->getMessage(), $wrapped->getCode(), $wrapped->getPrevious());
         $this->wrapped = $wrapped;
     }
 
