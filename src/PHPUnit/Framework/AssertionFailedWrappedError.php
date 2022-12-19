@@ -11,11 +11,11 @@ use PHPUnit\Util\Filter;
  *
  * @see \PHPUnit\Framework\ExceptionWrapper and \PHPUnit\Framework\AssertionFailedError
  */
-class ExpectationFailedWrappedError extends AssertionFailedError
+class AssertionFailedWrappedError extends AssertionFailedError
 {
 
     /**
-     * The wrapped exception.
+     * The wrapped error.
      */
     protected $wrapped;
 
@@ -24,14 +24,14 @@ class ExpectationFailedWrappedError extends AssertionFailedError
      */
     public function __construct(\Throwable $wrapped)
     {
-        parent::__construct($wrapped->getMessage(), NULL, $wrapped->getPrevious());
+        parent::__construct($wrapped->getMessage(), $wrapped->getCode(), $wrapped->getPrevious());
         $this->wrapped = $wrapped;
     }
 
   /**
    * @return string
    */
-  public function __toString()
+  public function __toString(): string
   {
     $string = TestFailure::exceptionToString($this->wrapped);
 
