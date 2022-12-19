@@ -2,7 +2,7 @@
 
 namespace PHPUnitBehat\PHPUnit\Framework;
 
-use PHPUnit\Framework\Exception\AssertionFailedError;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\Filter;
 
