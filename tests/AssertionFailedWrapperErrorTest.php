@@ -3,6 +3,7 @@
 namespace PHPUnitBehat\Tests;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnitBehat\PHPUnit\Framework\AssertionFailedWrappedError;
 
 /**
  *
@@ -68,7 +69,7 @@ FEATURE;
       "Failed: Given an error to wrap",
       "A wrapped test error message",
     ];
-    $this->assertBehatScenarioAssertion($scenario, TestWrappingException::class, $exceptionMessages);
+    $this->assertBehatScenarioAssertion($scenario, AssertionFailedWrappedError::class, $exceptionMessages);
   }
 
   /**
