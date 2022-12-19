@@ -68,7 +68,7 @@ FEATURE;
       "Failed: Given an error to wrap",
       "A wrapped test error message",
     ];
-    $this->assertBehatScenarioAssertion($scenario, TestException::class, $exceptionMessages);
+    $this->assertBehatScenarioAssertion($scenario, TestWrappingException::class, $exceptionMessages);
   }
 
   /**
