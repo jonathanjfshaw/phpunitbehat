@@ -149,7 +149,6 @@ To achieve this, in your test's base class you can catch these errors when scena
       throw new \PHPUnitBehat\PHPUnit\Framework\AssertionFailedWrappedError($e);
     }
   }
-}
 ```
 
 ## License
