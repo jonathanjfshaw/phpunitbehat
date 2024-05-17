@@ -21,7 +21,6 @@ trait BehatTestTrait  {
 
   /**
    * Test a Behat scenario.
-   *
    * @dataProvider providerTestBehatScenario
    */
   public function testBehatScenario($scenario, $feature): void
