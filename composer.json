@@ -1,5 +1,5 @@
 {
-  "name": "jonathanjfshaw/phpunitbehat",
+  "name": "pedrolifull/phpunitbehat",
   "type": "library",
   "description": "Use Behat from within PHPUnit.",
   "keywords": ["phpunit", "behat", "testing"],
