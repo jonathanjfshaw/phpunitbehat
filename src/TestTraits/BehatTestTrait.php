@@ -13,17 +13,19 @@ trait BehatTestTrait  {
    * Parses the ::feature property as a Behat feature,
    * breaking it down into individual scenarios for testing.
    */
-  public function providerTestBehatScenario() {
-    $feature = $this->parseBehatFeature($this->feature);
-    return $this->provideBehatFeature($feature);
+  public static function providerTestBehatScenario(): array
+  {
+    $feature = self::parseBehatFeature(self::$feature);
+    return self::provideBehatFeature($feature);
   }
 
   /**
    * Test a Behat scenario.
-   * 
+   *
    * @dataProvider providerTestBehatScenario
    */
-  public function testBehatScenario($scenario, $feature) {
+  public function testBehatScenario($scenario, $feature): void
+  {
     $this->assertBehatScenario($scenario, $feature);
   }
 
