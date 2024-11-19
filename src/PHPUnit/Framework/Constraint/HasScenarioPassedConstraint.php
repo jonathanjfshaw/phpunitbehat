@@ -17,6 +17,13 @@ class HasScenarioPassedConstraint extends Constraint
 {
 
   /**
+   * The behat environment.
+   *
+   * @var \PHPUnitBehat\Behat\Testwork\Environment\PHPUnitEnvironment
+   */
+  protected $environment;
+
+  /**
    * The behat scenario.
    *
    * @var \Behat\Gherkin\Node\ScenarioNode

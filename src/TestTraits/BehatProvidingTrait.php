@@ -108,7 +108,13 @@ trait BehatProvidingTrait  {
    * @return \Behat\Gherkin\Node\KeywordNodeInterface
    */
   protected function getProvidedFeature() {
-    $data = $this->getProvidedData();
+    $data = NULL;
+    if (method_exists($this, 'getProvidedData')) {
+      $data = $this->getProvidedData();
+    }
+    elseif (method_exists($this, 'providedData')) {
+      $data = $this->providedData();
+    }
     if (is_array($data) && $feature = $data[1]) {
       if ($feature instanceof KeywordNodeInterface) {
         return $feature;
@@ -128,7 +134,13 @@ trait BehatProvidingTrait  {
    *   The current scenario or example.
    */
   protected function getProvidedScenario() {
-    $data = $this->getProvidedData();
+    $data = NULL;
+    if (method_exists($this, 'getProvidedData')) {
+      $data = $this->getProvidedData();
+    }
+    elseif (method_exists($this, 'providedData')) {
+      $data = $this->providedData();
+    }
     if (is_array($data) && $scenario = $data[0]) {
       if ($scenario instanceof ScenarioInterface) {
         return $scenario;

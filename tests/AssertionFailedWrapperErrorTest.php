@@ -8,7 +8,7 @@ use PHPUnitBehat\PHPUnit\Framework\AssertionFailedWrappedError;
 /**
  *
  */
-class AssertionFailedWrappedErrorTest extends TestCase {
+class AssertionFailedWrapperErrorTest extends TestCase {
 
   use TestDefinitionsTrait;
 
