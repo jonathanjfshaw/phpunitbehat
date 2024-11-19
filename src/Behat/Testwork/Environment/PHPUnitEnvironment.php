@@ -40,6 +40,11 @@ class PHPUnitEnvironment implements ContextEnvironment
     protected $suite;
 
     /**
+     * @var TestCase
+     */
+    protected $testCase;
+
+    /**
      * Specifies the current PhpUnit test case.
      *
      * @param \PHPUnit\Framework\TestCase $testCase
