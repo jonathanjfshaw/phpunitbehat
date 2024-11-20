@@ -20,12 +20,14 @@ jobs:
             php: 8.3
           - phpunit: 11.4.3
             php: 8.2
-            env:
-              ACTION_TEST_SUFFIX: "Test.php"
+            uses: php-actions/phpunit@v3
+            with:
+              test_suffix: "Test.php"
           - phpunit: 11.4.3
             php: 8.3
-            env:
-              ACTION_TEST_SUFFIX: "Test.php"
+            uses: php-actions/phpunit@v3
+            with:
+              test_suffix: "Test.php"
 
     steps:
       - uses: actions/checkout@v3
