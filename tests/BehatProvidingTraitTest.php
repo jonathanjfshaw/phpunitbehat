@@ -14,7 +14,7 @@ class BehatProvidingTraitTest extends TestCase {
 
   use BehatTestTrait;
 
-  protected $feature = <<<'FEATURE'
+  protected static $feature = <<<'FEATURE'
 Feature: BehatProvidingTrait
     In order to test a feature
     We need to able provide it to phpunit 
