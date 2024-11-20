@@ -24,8 +24,8 @@ trait BehatProvidingTrait  {
    * @return Behat\Gherkin\Node\FeatureNode
    *   A Behat feature.
    */
-  public function parseBehatFeature($featureString, $keywords = NULL) {
-    $lexer  = new Lexer($this->getBehatKeywords($keywords));
+  public static function parseBehatFeature($featureString, $keywords = NULL) {
+    $lexer  = new Lexer(self::getBehatKeywords($keywords));
     $parser = new Parser($lexer);
     $feature = $parser->parse($featureString);
     return $feature;
@@ -46,7 +46,7 @@ trait BehatProvidingTrait  {
    * @return array
    *   An array of scenarios, each an array of title, scenario, and feature.
    */
-  public function provideBehatFeature(FeatureNode $feature) {
+  public static function provideBehatFeature(FeatureNode $feature) {
     $scenarios = [];
     foreach ($feature->getScenarios() as $scenario) {
         if ($scenario instanceof OutlineNode)  {
@@ -69,9 +69,9 @@ trait BehatProvidingTrait  {
    * 
    * @return \Behat\Gherkin\Keywords\ArrayKeywords
    */
-  protected function getBehatKeywords($keywords = NULL) {
+  protected static function getBehatKeywords($keywords = NULL) {
     if (is_null($keywords)) {
-      $keywords = $this->getBehatDefaultKeywords();
+      $keywords = self::getBehatDefaultKeywords();
     }
     return $keywords;
   }
@@ -81,7 +81,7 @@ trait BehatProvidingTrait  {
    *
    * @return \Behat\Gherkin\Keywords\ArrayKeywords
    */
-  public function getBehatDefaultKeywords() {
+  public static function getBehatDefaultKeywords() {
     return new ArrayKeywords([
         'en' => [
             'feature'          => 'Feature',
