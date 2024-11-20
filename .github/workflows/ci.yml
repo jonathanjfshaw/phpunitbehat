@@ -7,8 +7,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        phpunit: [9.5.26, 10.5.38, 11.4.3]
-        php: [8.2, 8.3]
+        include:
+          - phpunit: 9.5.26
+            php: 8.2
+          - phpunit: 9.5.26
+            php: 8.3
+          - phpunit: 10.5.38
+            php: 8.2
+          - phpunit: 10.5.38
+            php: 8.3
+          - phpunit: 11.4.3
+            php: 8.2
+          - phpunit: 11.4.3
+            php: 8.3
 
     steps:
       - uses: actions/checkout@v3
