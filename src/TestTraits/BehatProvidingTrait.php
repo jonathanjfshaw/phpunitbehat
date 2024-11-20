@@ -46,7 +46,7 @@ trait BehatProvidingTrait  {
    * @return array
    *   An array of scenarios, each an array of title, scenario, and feature.
    */
-  public function provideBehatFeature(FeatureNode $feature) {
+  public static function provideBehatFeature(FeatureNode $feature) {
     $scenarios = [];
     foreach ($feature->getScenarios() as $scenario) {
         if ($scenario instanceof OutlineNode)  {
