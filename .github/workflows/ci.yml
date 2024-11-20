@@ -41,3 +41,4 @@ jobs:
         with:
           php_version: ${{ matrix.php }}
           version: ${{ matrix.phpunit }}
+          test_suffix: "Test.php"
