@@ -14,7 +14,7 @@ trait BehatTestTrait  {
    * breaking it down into individual scenarios for testing.
    */
   public static function providerTestBehatScenario() {
-    $feature = self::parseBehatFeature(self::$feature);
+    $feature = self::parseBehatFeature(static::$feature);
     return self::provideBehatFeature($feature);
   }
 
