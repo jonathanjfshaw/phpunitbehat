@@ -25,7 +25,7 @@ trait BehatProvidingTrait  {
    *   A Behat feature.
    */
   public static function parseBehatFeature($featureString, $keywords = NULL) {
-    $lexer  = new Lexer(self::getBehatKeywords($keywords));
+    $lexer  = new Lexer(static::getBehatKeywords($keywords));
     $parser = new Parser($lexer);
     $feature = $parser->parse($featureString);
     return $feature;
@@ -71,7 +71,7 @@ trait BehatProvidingTrait  {
    */
   protected static function getBehatKeywords($keywords = NULL) {
     if (is_null($keywords)) {
-      $keywords = self::getBehatDefaultKeywords();
+      $keywords = static::getBehatDefaultKeywords();
     }
     return $keywords;
   }
