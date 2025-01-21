@@ -257,12 +257,22 @@ TPL;
       $identifier = new \Behat\Behat\Context\Snippet\Generator\FixedContextIdentifier($context);
       $this->snippetGenerator->setContextIdentifier($identifier);
 
-      // Modify the snippet generator's template so that it no longer
-      // refers to PendingException().
-      $templateReflector = new \ReflectionProperty(get_class($this->snippetGenerator), 'templateTemplate');
-      $templateReflector->setAccessible(true);
-      $templateReflector->setValue($this->snippetGenerator, $this->snippetTemplate);
-  }
+      // Determine the correct property name.
+      $reflector = new \ReflectionClass(get_class($this->snippetGenerator));
+      $templateProperty = null;
+      if ($reflector->hasProperty('snippetTemplate')) {
+          $templateProperty = 'snippetTemplate';
+      } elseif ($reflector->hasProperty('templateTemplate')) {
+          $templateProperty = 'templateTemplate';
+      }
+
+      if ($templateProperty !== null) {
+          // Modify the snippet generator's template to remove reference to pending exception.
+          $templateReflector = new \ReflectionProperty(get_class($this->snippetGenerator), $templateProperty);
+          $templateReflector->setAccessible(true);
+          $templateReflector->setValue($this->snippetGenerator, $this->snippetTemplate);
+      }
+    }
 
     protected function generateSnippet($step) {
       if (!is_null($this->snippetGenerator) && !is_null($this->environment)) {
