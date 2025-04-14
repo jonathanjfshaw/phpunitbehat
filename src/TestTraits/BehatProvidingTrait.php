@@ -21,7 +21,7 @@ trait BehatProvidingTrait  {
    * @param \Behat\Gherkin\Keywords\ArrayKeywords|Null $keywords (optional)
    *   Keywords to be used to interpret the Behat feature.
    * 
-   * @return Behat\Gherkin\Node\FeatureNode
+   * @return \Behat\Gherkin\Node\FeatureNode
    *   A Behat feature.
    */
   public static function parseBehatFeature($featureString, $keywords = NULL) {
