@@ -8,12 +8,9 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
-          - phpunit: 9.5.26
-            php: 8.2
-          - phpunit: 9.5.26
-            php: 8.3
           - phpunit: 10.5.38
             php: 8.2
           - phpunit: 10.5.38
@@ -21,17 +18,19 @@ jobs:
           - phpunit: 11.4.3
             php: 8.2
           - phpunit: 11.4.3
+            php: 8.3
+          - phpunit: 12.5.14
             php: 8.3
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - uses: php-actions/composer@v6.1.1
         with:
           php_version: ${{ matrix.php }}
 
       - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3.0.2
+        uses: php-actions/phpunit@v4
         with:
           php_version: ${{ matrix.php }}
           version: ${{ matrix.phpunit }}
