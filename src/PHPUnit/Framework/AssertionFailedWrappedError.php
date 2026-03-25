@@ -3,13 +3,11 @@
 namespace PHPUnitBehat\PHPUnit\Framework;
 
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\TestFailure;
-use PHPUnit\Util\Filter;
 
 /**
  * Allows wrapping an exception as an expectation failure.
  *
- * @see \PHPUnit\Framework\ExceptionWrapper and \PHPUnit\Framework\AssertionFailedError
+ * @see \PHPUnit\Framework\AssertionFailedError
  */
 class AssertionFailedWrappedError extends AssertionFailedError
 {
@@ -17,10 +15,10 @@ class AssertionFailedWrappedError extends AssertionFailedError
     /**
      * The wrapped error.
      */
-    protected $wrapped;
+    protected \Throwable $wrapped;
 
     /**
-     * @param \Throwable        $wrapped
+     * @param \Throwable $wrapped
      */
     public function __construct(\Throwable $wrapped)
     {
@@ -28,18 +26,18 @@ class AssertionFailedWrappedError extends AssertionFailedError
         $this->wrapped = $wrapped;
     }
 
-  /**
-   * @return string
-   */
-  public function __toString(): string
-  {
-    $string = TestFailure::exceptionToString($this->wrapped);
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $string = $this->wrapped->getMessage();
 
-    if ($trace = Filter::getFilteredStacktrace($this->wrapped)) {
-      $string .= "\n" . $trace;
+        if ($trace = $this->wrapped->getTraceAsString()) {
+            $string .= "\n" . $trace;
+        }
+
+        return $string;
     }
-
-    return $string;
-  }
 
 }
