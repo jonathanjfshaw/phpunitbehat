@@ -2,6 +2,8 @@
 
 namespace PHPUnitBehat\TestTraits;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 trait BehatTestTrait  {
 
   use BehatScenarioTestingTrait;
@@ -20,10 +22,10 @@ trait BehatTestTrait  {
 
   /**
    * Test a Behat scenario.
-   * 
-   * @dataProvider providerTestBehatScenario
    */
+  #[DataProvider('providerTestBehatScenario')]
   public function testBehatScenario($scenario, $feature) {
+    $this->setProvidedData($scenario, $feature);
     $this->assertBehatScenario($scenario, $feature);
   }
 

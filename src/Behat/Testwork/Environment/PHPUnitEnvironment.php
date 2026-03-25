@@ -72,7 +72,7 @@ class PHPUnitEnvironment implements ContextEnvironment
      *
      * @throws ContextNotFoundException   If class does not exist
      */
-    public function registerContextClass($contextClass, array $arguments = null)
+    public function registerContextClass($contextClass, ?array $arguments = null)
     {
         // Unlike the method in 
         // Behat\Behat\Context\Environment\UnitializedContextEnvironment

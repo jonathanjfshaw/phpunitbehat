@@ -13,6 +13,16 @@ use Behat\Gherkin\Node\ScenarioInterface;
 
 trait BehatProvidingTrait  {
 
+  /**
+   * The current scenario being tested, set by the test method.
+   */
+  protected ?ScenarioInterface $currentBehatScenario = null;
+
+  /**
+   * The current feature being tested, set by the test method.
+   */
+  protected ?KeywordNodeInterface $currentBehatFeature = null;
+
   /** 
    * Parses the text of a Behat feature into an array.
    * 
@@ -99,6 +109,20 @@ trait BehatProvidingTrait  {
     }
 
   /**
+   * Set the current provided data for access from step methods.
+   *
+   * Call this from within a test method to make the scenario and feature
+   * available via getProvidedScenario() and getProvidedFeature().
+   *
+   * @param \Behat\Gherkin\Node\ScenarioInterface $scenario
+   * @param \Behat\Gherkin\Node\KeywordNodeInterface $feature
+   */
+  protected function setProvidedData(ScenarioInterface $scenario, KeywordNodeInterface $feature): void {
+    $this->currentBehatScenario = $scenario;
+    $this->currentBehatFeature = $feature;
+  }
+
+  /**
    * Get the current feature.
    *
    * This is intended to be called from within a test method or test setUp
@@ -108,19 +132,10 @@ trait BehatProvidingTrait  {
    * @return \Behat\Gherkin\Node\KeywordNodeInterface
    */
   protected function getProvidedFeature() {
-    $data = NULL;
-    if (method_exists($this, 'getProvidedData')) {
-      $data = $this->getProvidedData();
+    if ($this->currentBehatFeature !== null) {
+      return $this->currentBehatFeature;
     }
-    elseif (method_exists($this, 'providedData')) {
-      $data = $this->providedData();
-    }
-    if (is_array($data) && $feature = $data[1]) {
-      if ($feature instanceof KeywordNodeInterface) {
-        return $feature;
-      }
-    }
-    throw new \Exception("Feature not found in provided data.");
+    throw new \Exception("Feature not found. Call setProvidedData() in your test method before accessing the feature.");
   }
 
   /**
@@ -134,19 +149,10 @@ trait BehatProvidingTrait  {
    *   The current scenario or example.
    */
   protected function getProvidedScenario() {
-    $data = NULL;
-    if (method_exists($this, 'getProvidedData')) {
-      $data = $this->getProvidedData();
+    if ($this->currentBehatScenario !== null) {
+      return $this->currentBehatScenario;
     }
-    elseif (method_exists($this, 'providedData')) {
-      $data = $this->providedData();
-    }
-    if (is_array($data) && $scenario = $data[0]) {
-      if ($scenario instanceof ScenarioInterface) {
-        return $scenario;
-      }
-    }
-    throw new \Exception("Scenario not found in provided data.");
+    throw new \Exception("Scenario not found. Call setProvidedData() in your test method before accessing the scenario.");
   }
 
 }

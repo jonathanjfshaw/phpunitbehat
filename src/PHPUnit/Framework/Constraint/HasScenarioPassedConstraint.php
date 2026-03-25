@@ -47,14 +47,12 @@ class HasScenarioPassedConstraint extends Constraint
   /**
    * The snippet generator.
    *
-   * @var [type]
+   * @var mixed
    */
   protected $snippetGenerator;
 
   /**
-   * Undocumented variable
-   *
-   * @var [type]
+   * @var string
    */
   protected $snippetTemplate = <<<TPL
   /**
@@ -95,7 +93,7 @@ TPL;
     /**
      * {@inheritdoc}
      */
-    protected function failureDescription($other): string
+    protected function failureDescription(mixed $other): string
     {
         // Because we throw exceptions in ::bubbleStepResults(),
         // this is only used for undefined steps, not failing steps.       
@@ -105,7 +103,7 @@ TPL;
     /**
      * {@inheritdoc}
      */
-    protected function additionalFailureDescription($other): string
+    protected function additionalFailureDescription(mixed $other): string
     {   
         // Because we throw exceptions in ::bubbleStepResults(),
         // we expect to only use this for undefined steps, not failing steps.
@@ -117,10 +115,10 @@ TPL;
     /**
      * {@inheritdoc}
      */
-    protected function matches($scenarioResults): bool
+    protected function matches(mixed $other): bool
     {
         $this->bubbleStepResults();
-        return $scenarioResults->isPassed();
+        return $other->isPassed();
     }
   
     /**
@@ -156,7 +154,6 @@ TPL;
      */
     protected function modifyExceptionMessage(Exception &$exception, array $stepsSoFar) {
       $traceReflector = new \ReflectionProperty('Exception', 'message');
-      $traceReflector->setAccessible(true);
       $originalMessage = $traceReflector->getValue($exception);
       $stepResultsMessage = $this->stepResultsMessage($stepsSoFar);
       $modifiedMessage = "\n$stepResultsMessage\n\n$originalMessage";
@@ -195,18 +192,8 @@ TPL;
      *   The name of the class at whose first occurrence to truncate.
      */
     protected function truncateExceptionTrace(Exception &$exception, $ceiling) {
-      if ($exception instanceof PHPUnitException) {
-        // PhpUnit's trace is copied to a serializableTrace property
-        // when the exception s created and this is used when rendering to string. 
-        $reflectionClassName = 'PHPUnit\FrameworkException\Exception';
-        $traceReflector = new \ReflectionProperty('PHPUnit\Framework\Exception', 'serializableTrace');
-        $fullTrace = $exception->getSerializableTrace();
-      }
-      else {
-        $traceReflector = new \ReflectionProperty('Exception', 'trace');
-        $fullTrace = $exception->getTrace();
-      }
-      $traceReflector->setAccessible(true);
+      $traceReflector = new \ReflectionProperty('Exception', 'trace');
+      $fullTrace = $exception->getTrace();
       $trace = $this->truncateTraceArray($fullTrace, $ceiling);
       $traceReflector->setValue($exception, $trace);
     }
@@ -269,7 +256,6 @@ TPL;
       if ($templateProperty !== null) {
           // Modify the snippet generator's template to remove reference to pending exception.
           $templateReflector = new \ReflectionProperty(get_class($this->snippetGenerator), $templateProperty);
-          $templateReflector->setAccessible(true);
           $templateReflector->setValue($this->snippetGenerator, $this->snippetTemplate);
       }
     }
