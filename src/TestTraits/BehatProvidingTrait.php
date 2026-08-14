@@ -37,28 +37,74 @@ trait BehatProvidingTrait  {
    * suitable to be supplied by a phpunit data provider for 
    * individual testing.
    * 
-   * Passing scenario title as the first arg is not strictly necessary 
-   * but improves the readability of phpunit's CLI output of the test results.
-   * 
+   * Scenarios are keyed by their title, which phpunit uses to name the test.
+   * Keys must be unique: were two scenarios to share one, phpunit would run
+   * only the last of them, without reporting that the others were dropped.
+   *
    * @param string $feature
    *   A Behat feature.
-   * 
+   *
    * @return array
-   *   An array of scenarios, each an array of title, scenario, and feature.
+   *   An array of scenarios, each an array of scenario and feature, keyed by
+   *   scenario title.
+   *
+   * @throws \RuntimeException
+   *   If two scenarios would be given the same key.
    */
   public static function provideBehatFeature(FeatureNode $feature) {
     $scenarios = [];
-    foreach ($feature->getScenarios() as $scenario) {
-        if ($scenario instanceof OutlineNode)  {
-          foreach ($scenario->getExamples() as $index => $example) {
-            $scenarios[$scenario->getTitle() . ' #' . $index] = [$example, $feature];
-          }
-        }
-        else {
-          $scenarios[$scenario->getTitle()] = [$scenario, $feature];
-        }
+    // The line each key came from, so a collision can name both scenarios.
+    $lines = [];
+    foreach (static::getKeyedBehatScenarios($feature) as [$key, $scenario]) {
+      if (isset($lines[$key])) {
+        throw new \RuntimeException(sprintf('Feature "%s" has more than one scenario keyed "%s" at line %d and line %d. Scenario keys must be unique, or phpunit would run only one of these scenarios.', $feature->getTitle(), $key, $lines[$key], $scenario->getLine()));
+      }
+      $lines[$key] = $scenario->getLine();
+      $scenarios[$key] = [$scenario, $feature];
     }
     return $scenarios;
+  }
+
+  /**
+   * List a feature's scenarios and examples with the key each would be given.
+   *
+   * @param \Behat\Gherkin\Node\FeatureNode $feature
+   *   A Behat feature.
+   *
+   * @return array
+   *   An array of pairs of key and scenario, in the order they are declared.
+   */
+  protected static function getKeyedBehatScenarios(FeatureNode $feature) {
+    $keyed = [];
+    foreach ($feature->getScenarios() as $scenario) {
+      if ($scenario instanceof OutlineNode)  {
+        foreach ($scenario->getExamples() as $index => $example) {
+          $keyed[] = [static::getBehatScenarioKey($scenario) . ' #' . $index, $example];
+        }
+      }
+      else {
+        $keyed[] = [static::getBehatScenarioKey($scenario), $scenario];
+      }
+    }
+    return $keyed;
+  }
+
+  /**
+   * Get the key by which a scenario or outline is provided.
+   *
+   * @param \Behat\Gherkin\Node\ScenarioInterface $scenario
+   *   A Behat scenario or outline.
+   *
+   * @return string
+   *   The scenario title, or its line if it has no title.
+   */
+  protected static function getBehatScenarioKey(ScenarioInterface $scenario) {
+    $title = $scenario->getTitle();
+    // Untitled scenarios have nothing but their position to distinguish them.
+    if (is_null($title) || trim($title) === '') {
+      return 'line ' . $scenario->getLine();
+    }
+    return $title;
   }
 
   /**
