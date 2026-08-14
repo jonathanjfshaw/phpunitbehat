@@ -129,6 +129,12 @@ phpunit --filter '@Undefined'
 ```
 More complex possibilities exist; see https://phpunit.de/manual/6.5/en/textui.html#textui.examples.filter-patterns.
 
+## Scenario titles
+
+Every scenario in a feature must have a title that is unique within that feature, because the title is used as the data provider key. Each example of a scenario outline is keyed by the outline title followed by the example's index, such as `My outline #0`. A scenario without a title is keyed by its line in the feature, such as `line 12`.
+
+If two scenarios would be given the same key an exception is thrown, naming the key and the line of each scenario. Without this, phpunit would run only one of those scenarios and give no indication that the others had been dropped.
+
 ## Failures and errors
 
 Phpunit will report any instance of AssertionFailedError as a failure and other exceptions as errors. In some circumstances you may wish to display certain exceptions as errors. For example, if you're using Mink for web assertions, you may want to report Mink's ExpectationExpection (which is thrown when web content does not match an expectation) as a failure not an error.
